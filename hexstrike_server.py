@@ -64,6 +64,7 @@ import mitmproxy
 from mitmproxy import http as mitmhttp
 from mitmproxy.tools.dump import DumpMaster
 from mitmproxy.options import Options as MitmOptions
+from selenium.webdriver.chrome.service import Service
 
 # ============================================================================
 # LOGGING CONFIGURATION (MUST BE FIRST)
@@ -13659,7 +13660,8 @@ class BrowserAgent:
             # Enable network logging
             chrome_options.set_capability('goog:loggingPrefs', {'performance': 'ALL'})
 
-            self.driver = webdriver.Chrome(options=chrome_options)
+            service = Service("/usr/bin/chromedriver")
+            self.driver = webdriver.Chrome(service=service, options=chrome_options)
             self.driver.set_page_load_timeout(30)
 
             logger.info(f"{ModernVisualEngine.format_tool_status('BrowserAgent', 'RUNNING', 'Chrome Browser Initialized')}")
