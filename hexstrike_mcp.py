@@ -5421,6 +5421,12 @@ def parse_args():
     parser.add_argument("--timeout", type=int, default=DEFAULT_REQUEST_TIMEOUT,
                       help=f"Request timeout in seconds (default: {DEFAULT_REQUEST_TIMEOUT})")
     parser.add_argument("--debug", action="store_true", help="Enable debug logging")
+    parser.add_argument("--transport", type=str, default="stdio", choices=["stdio", "sse"],
+                      help="Transportation mode: stdio (default) or sse")
+    parser.add_argument("--host", type=str, default="127.0.0.1",
+                      help="Host for SSE server (default: 127.0.0.1)")
+    parser.add_argument("--port", type=int, default=8000,
+                      help="Port for SSE server (default: 8000)")
     return parser.parse_args()
 
 def main():
@@ -5457,9 +5463,15 @@ def main():
 
         # Set up and run the MCP server
         mcp = setup_mcp_server(hexstrike_client)
-        logger.info("🚀 Starting HexStrike AI MCP server")
-        logger.info("🤖 Ready to serve AI agents with enhanced cybersecurity capabilities")
-        mcp.run()
+        
+        if args.transport == "sse":
+            logger.info(f"🚀 Starting HexStrike AI MCP server in SSE mode on {args.host}:{args.port}")
+            logger.info("🤖 Ready to serve AI agents with enhanced cybersecurity capabilities")
+            mcp.run(transport="sse", host=args.host, port=args.port)
+        else:
+            logger.info("🚀 Starting HexStrike AI MCP server in stdio mode")
+            logger.info("🤖 Ready to serve AI agents with enhanced cybersecurity capabilities")
+            mcp.run(transport="stdio")
     except Exception as e:
         logger.error(f"💥 Error starting MCP server: {str(e)}")
         import traceback
