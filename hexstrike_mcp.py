@@ -26,7 +26,7 @@ import requests
 import time
 from datetime import datetime
 
-from mcp.server.fastmcp import FastMCP
+from fastmcp import FastMCP
 
 class HexStrikeColors:
     """Enhanced color palette matching the server's ModernVisualEngine.COLORS"""
@@ -5423,7 +5423,7 @@ def parse_args():
     parser.add_argument("--debug", action="store_true", help="Enable debug logging")
     parser.add_argument("--transport", type=str, default="stdio", choices=["stdio", "sse"],
                       help="Transportation mode: stdio (default) or sse")
-    parser.add_argument("--host", type=str, default="127.0.0.1",
+    parser.add_argument("--host", type=str, default="0.0.0.0",
                       help="Host for SSE server (default: 127.0.0.1)")
     parser.add_argument("--port", type=int, default=8000,
                       help="Port for SSE server (default: 8000)")
